@@ -14,7 +14,7 @@ export default function Header() {
   });
 
   function calculateTimeLeft() {
-    const votingEndTime = new Date("2024-04-22T00:00:00Z").getTime(); // Set the end time here
+    const votingEndTime = new Date("2024-04-23T00:00:00Z").getTime(); // Set the end time here
     const now = new Date().getTime();
     const difference = votingEndTime - now;
 

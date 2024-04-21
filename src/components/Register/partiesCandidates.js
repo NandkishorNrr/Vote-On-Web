@@ -1,4 +1,4 @@
-export default [
+const parties = [
   {
     partyName: "BJP",
     candidateName: "Candidate 1",
@@ -22,7 +22,7 @@ export default [
   {
     partyName: "CPI",
     candidateName: "Candidate 5",
-    partyFlag: "/images/NPP_Flag.svg",
+    partyFlag: "/images/CPI_Flag.svg",
   },
   {
     partyName: "NOTA",
@@ -30,3 +30,5 @@ export default [
     partyFlag: "/images/VOW-About.png",
   },
 ];
+
+export default parties;

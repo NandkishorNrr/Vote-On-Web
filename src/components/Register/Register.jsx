@@ -6,12 +6,12 @@ import VotingPage from "./VotingPage";
 function Registration() {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState("Nrr");
-  const [lastName, setLastName] = useState("Rth");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [fullName, setFullName] = useState("");
   const [adharNo, setAdharNo] = useState("");
   const [voterId, setVoterId] = useState("");
-  const [address, setAddress] = useState("123 xyz, MP(123654) In ");
+  const [address, setAddress] = useState("");
   const [otp, setOtp] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
@@ -244,7 +244,7 @@ function Registration() {
                   onClick={handleVote}
                   className="bg-orange-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-orange-700 transition ease-in-out duration-300"
                 >
-                  You vote has been considered..!
+                  Your vote has been considered..!
                 </button>
               </div>
             </>
