@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import VotingPage from "./VotingPage";
 
 function Registration() {
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("Nrr");
   const [lastName, setLastName] = useState("Rth");
   const [fullName, setFullName] = useState("");
-  const [mobileNumber, setMobileNumber] = useState(12345467890);
-  const [email, setEmail] = useState("");
   const [adharNo, setAdharNo] = useState("");
   const [voterId, setVoterId] = useState("");
   const [address, setAddress] = useState("123 xyz, MP(123654) In ");
@@ -13,8 +15,11 @@ function Registration() {
   const [isVerified, setIsVerified] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [otpError, setOtpError] = useState("");
+  const [otpErrorCls, setOtpErrorCls] = useState("");
   const [linkageMessage, setLinkageMessage] = useState("");
   const [timer, setTimer] = useState(30);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [voted, setVoted] = useState(false);
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -22,14 +27,6 @@ function Registration() {
 
   const handleLastNameChange = (e) => {
     setLastName(e.target.value);
-  };
-
-  const handleMobileNumberChange = (e) => {
-    setMobileNumber(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
   };
 
   const handleAdharNoChange = (e) => {
@@ -57,10 +54,11 @@ function Registration() {
         setIsOtpSent(true);
         setLinkageMessage("");
         setOtpError(
-          `OTP Sent Successfully, on your registered mobile number end with ******${mobileNumber
+          `OTP Sent Successfully, on your registered mobile number end with ******${adharNo
             .toString()
             .slice(-4)}`
         );
+        setOtpErrorCls("text-green-600");
       }, 1500);
     } else {
       setLinkageMessage("Adhar and Voter ID not linked");
@@ -74,20 +72,23 @@ function Registration() {
       setIsVerified(true);
       setFullName(`${firstName} ${lastName}`);
     } else {
+      setOtpErrorCls("text-red-600");
       setOtpError("OTP verification failed.");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Mobile Number:", mobileNumber);
-    console.log("Email:", email);
-    console.log("Adhar No:", adharNo);
-    console.log("Voter ID:", voterId);
-    console.log("Address:", address);
+  };
+
+  const handleVote = () => {
+    if (!voted) {
+      // Simulate voting, in real implementation, this would be handled by an API
+      setVoted(true);
+      navigate("/voting-page");
+    } else {
+      alert("You have already voted.");
+    }
   };
 
   useEffect(() => {
@@ -107,15 +108,16 @@ function Registration() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="grid grid-cols-1 w-2/3 h-2/3   bg-orange-300 bg-opacity-50 rounded-lg p-8 md:grid-cols-2">
-        <div className="p-6 mr-2 sm:rounded-lg bg-green-300">
+      <div className="grid grid-cols-1 w-2/3 h-2/3 bg-orange-300 bg-opacity-50 rounded-lg p-8 md:grid-cols-2">
+        <div className="p-6 mr-2 sm:rounded-lg">
           {/* <img src="/images/VOw-GoVote.png" alt="" /> */}
+          <img src="/images/VOW-voting.png" alt="" />
         </div>
         <form
           className="p-6 flex flex-col justify-center"
           onSubmit={handleSubmit}
         >
-          {!isVerified && !isOtpSent && (
+          {!isVerified && !isOtpSent && !registrationSuccess && (
             <>
               <div className="flex flex-col ">
                 <label htmlFor="adharNo">Adhar No</label>
@@ -150,10 +152,10 @@ function Registration() {
               >
                 Verify Adhar & Voter ID
               </button>
-              <p className="text-green-500 text-lg p-2">{linkageMessage}</p>
+              <p className="text-green-500 text-lg  p-2">{linkageMessage}</p>
             </>
           )}
-          {isOtpSent && !isVerified ? (
+          {isOtpSent && !isVerified && !registrationSuccess ? (
             <div className="flex flex-col mt-2">
               <label htmlFor="otp">OTP</label>
               <input
@@ -166,7 +168,9 @@ function Registration() {
                 required
                 className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
               />
-              <p className="text-green-600 text-lg max-w-fit p-4">{otpError}</p>
+              <p className={`text-lg max-w-fit p-4 ${otpErrorCls} `}>
+                {otpError}
+              </p>
               <p className="text-orange-700 ">Time Left: {timer}s</p>
               <button
                 type="button"
@@ -177,13 +181,13 @@ function Registration() {
               </button>
             </div>
           ) : null}
-          {isVerified && (
+          {isVerified && !registrationSuccess && !voted && (
             <>
-              <div className="flex flex-col items-center h-1/2 w-1/2 mt-2 bg-gray-500 rounded-lg">
+              <div className="flex flex-col items-center mt-2 bg-gray-500 rounded-lg">
                 <img
                   src="/images/VOW-GoVote.png"
                   alt=""
-                  className="w-1/2 h-1/2 object-cover"
+                  className="w-32 h-32 object-cover"
                 />{" "}
                 {/* Adjust size as needed */}
               </div>
@@ -200,10 +204,11 @@ function Registration() {
                 <div>{address}</div>
               </div>
               <button
-                type="submit"
+                type="button"
+                onClick={handleVote}
                 className="bg-green-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-green-700 transition ease-in-out duration-300"
               >
-                Register Now
+                Vote
               </button>
             </>
           )}

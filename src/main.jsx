@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import App from "./App.jsx";
 import "./index.css";
 import {
@@ -14,6 +14,7 @@ import Contact from "./components/Contact/Contact.jsx";
 import User from "./components/User/User.jsx";
 import Login from "./components/Login/Login.jsx";
 import Register from "./components/Register/Register.jsx";
+import VotingPage from "./components/Register/VotingPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="user/:userid" element={<User />} />
+      <Route path="voting-page" element={<VotingPage />} />
     </Route>
   )
 );

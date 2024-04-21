@@ -6,10 +6,10 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div className="app">
-      <Header />
-      <Outlet />
-      <Footer />
+    <div id="root" className="app">
+      <Header className="header" />
+      <Outlet className="outlet" />
+      <Footer className="footer" />
     </div>
   );
 }

@@ -1,57 +1,76 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    // Clear timeout if the component is unmounted
+    return () => clearTimeout(timer);
+  });
+
+  function calculateTimeLeft() {
+    const votingEndTime = new Date("2024-04-22T00:00:00Z").getTime(); // Set the end time here
+    const now = new Date().getTime();
+    const difference = votingEndTime - now;
+
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    } else {
+      timeLeft = {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      };
+    }
+
+    return timeLeft;
+  }
+
   return (
     <header className="shadow sticky z-50 top-0">
-      <nav className="bg-orange-200 rounded-md border-gray-200 px-4 lg:px-6 py-2.5">
+      <nav className="bg-orange-200 rounded-md border-gray-200 px-2 lg:px-6 py-1">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
             <img src="/images/VOW-logo.png" className="mr-3 h-12" alt="Logo" />
           </Link>
           <div className="flex items-center lg:order-2">
-            <Link
-              to="login"
-              className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-            >
-              Log in
-            </Link>
-            <Link
-              to="/register"
-              className="text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-            >
-              Register Now
-            </Link>
+            <p className="text-orange-700 font-bold text-3xl">
+              {timeLeft.days} Day,{" "}
+              {timeLeft.hours < 10 ? `0${timeLeft.hours}` : timeLeft.hours}:
+              {timeLeft.minutes < 10
+                ? `0${timeLeft.minutes}`
+                : timeLeft.minutes}
+              :
+              {timeLeft.seconds < 10
+                ? `0${timeLeft.seconds}`
+                : timeLeft.seconds}{" "}
+            </p>
           </div>
           <div
             className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
             id="mobile-menu-2"
           >
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              <li>
-                <NavLink
-                  to="/about"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                    ${isActive ? "text-orange-600" : "text-gray-500"}
-                    hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-gray-600 lg:p-0`
-                  }
-                >
-                  About
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/contact"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                    ${isActive ? "text-orange-600" : "text-gray-500"}
-                    hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-gray-600 lg:p-0`
-                  }
-                >
-                  Contact
-                </NavLink>
-              </li>
+              <Link to="/register">
+                <img
+                  src="/images/VOW-voteIndial.png"
+                  className=" h-16"
+                  alt="Logo"
+                />
+              </Link>
             </ul>
           </div>
         </div>
