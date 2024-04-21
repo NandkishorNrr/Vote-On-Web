@@ -1,4 +1,4 @@
-export const dummyData = [
+export const partiesVotes = [
   {
     locality: "Madhya Pradesh",
     BJP: { name: "BJP", votes: 456 },
@@ -71,10 +71,10 @@ export const dummyData = [
   },
 ];
 
-export default dummyData;
+export default partiesVotes;
 
 export function generateRandomVotes() {
-  return dummyData.map((item) => ({
+  return partiesVotes.map((item) => ({
     ...item,
     BJP: {
       name: item.BJP.name,

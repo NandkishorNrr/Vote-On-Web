@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import dummyPeople from "./dummyPeople";
 import VotingPage from "./VotingPage";
 
 function Registration() {
@@ -19,7 +20,7 @@ function Registration() {
   const [linkageMessage, setLinkageMessage] = useState("");
   const [timer, setTimer] = useState(30);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [voted, setVoted] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -47,21 +48,26 @@ function Registration() {
 
   const handleSendOtp = () => {
     // In real implementation, this would be handled by an API
-    if (adharNo === voterId) {
-      setLinkageMessage("Adhar and Voter ID linked");
+    const person = dummyPeople.find((p) => p.aadharNo === adharNo);
+    if (person) {
+      if (person.voterId === voterId) {
+        setLinkageMessage("Adhar and Voter ID verified");
 
-      setTimeout(() => {
-        setIsOtpSent(true);
-        setLinkageMessage("");
-        setOtpError(
-          `OTP Sent Successfully, on your registered mobile number end with ******${adharNo
-            .toString()
-            .slice(-4)}`
-        );
-        setOtpErrorCls("text-green-600");
-      }, 1500);
+        setTimeout(() => {
+          setIsOtpSent(true);
+          setLinkageMessage("");
+          setOtpError(
+            `OTP Sent Successfully, on your registered mobile number ending with ******${person.mobileNumber
+              .toString()
+              .slice(-4)}`
+          );
+          setOtpErrorCls("text-green-600");
+        }, 1500);
+      } else {
+        setLinkageMessage("Adhar and Voter ID not linked");
+      }
     } else {
-      setLinkageMessage("Adhar and Voter ID not linked");
+      setLinkageMessage("Invalid Adhar Number");
     }
   };
 
@@ -70,6 +76,8 @@ function Registration() {
     const dummyVerified = otp === "123456"; // Dummy OTP for verification
     if (dummyVerified) {
       setIsVerified(true);
+      const person = dummyPeople.find((p) => p.aadharNo === adharNo);
+      setUserDetails(person);
       setFullName(`${firstName} ${lastName}`);
     } else {
       setOtpErrorCls("text-red-600");
@@ -82,12 +90,12 @@ function Registration() {
   };
 
   const handleVote = () => {
-    if (!voted) {
-      // Simulate voting, in real implementation, this would be handled by an API
-      setVoted(true);
+    // alert("You have already voted." + userDetails.voted);
+    if (!userDetails.voted) {
       navigate("/voting-page");
     } else {
-      alert("You have already voted.");
+      // alert("You have already voted.");
+      navigate("/");
     }
   };
 
@@ -110,7 +118,6 @@ function Registration() {
     <div className="flex justify-center items-center h-screen">
       <div className="grid grid-cols-1 w-2/3 h-2/3 bg-orange-300 bg-opacity-50 rounded-lg p-8 md:grid-cols-2">
         <div className="p-6 mr-2 sm:rounded-lg">
-          {/* <img src="/images/VOw-GoVote.png" alt="" /> */}
           <img src="/images/VOW-voting.png" alt="" />
         </div>
         <form
@@ -181,13 +188,13 @@ function Registration() {
               </button>
             </div>
           ) : null}
-          {isVerified && !registrationSuccess && !voted && (
+          {isVerified && !registrationSuccess && !userDetails.voted && (
             <>
-              <div className="flex flex-col items-center mt-2 bg-gray-500 rounded-lg">
+              <div className="flex flex-col items-center mt-2 ">
                 <img
-                  src="/images/VOW-GoVote.png"
+                  src={userDetails.profilePhoto}
                   alt=""
-                  className="w-32 h-32 object-cover"
+                  className="w-32 h-32 object-cover rounded-lg"
                 />{" "}
                 {/* Adjust size as needed */}
               </div>
@@ -195,21 +202,51 @@ function Registration() {
                 <label htmlFor="fullName" className="font-semibold">
                   Name:
                 </label>
-                <div>{fullName}</div>
+                <div>{userDetails ? userDetails.fullName : fullName}</div>
               </div>
               <div className="flex flex-col mt-2">
                 <label htmlFor="address" className="font-semibold">
                   Address:
                 </label>
-                <div>{address}</div>
+                <div>{userDetails ? userDetails.address : address}</div>
               </div>
               <button
                 type="button"
                 onClick={handleVote}
                 className="bg-green-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-green-700 transition ease-in-out duration-300"
               >
-                Vote
+                Go For Vote
               </button>
+            </>
+          )}
+          {userDetails.voted && !registrationSuccess && (
+            <>
+              <div className="flex flex-col items-center mt-2 ">
+                <img
+                  src={userDetails.profilePhoto}
+                  alt=""
+                  className="w-32 h-32 object-cover rounded-lg"
+                />{" "}
+                {/* Adjust size as needed */}
+              </div>
+              <div className="flex flex-col mt-2">
+                <label htmlFor="fullName" className="font-semibold">
+                  Name:
+                </label>
+                <div>{userDetails ? userDetails.fullName : fullName}</div>
+              </div>
+              <div className="flex flex-col mt-2">
+                <label htmlFor="address" className="font-semibold">
+                  Address:
+                </label>
+                <div>{userDetails ? userDetails.address : address}</div>
+                <button
+                  onClick={handleVote}
+                  className="bg-orange-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-orange-700 transition ease-in-out duration-300"
+                >
+                  You vote has been considered..!
+                </button>
+              </div>
             </>
           )}
         </form>
