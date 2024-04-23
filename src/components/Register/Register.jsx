@@ -92,7 +92,7 @@ function Registration() {
   const handleVote = () => {
     // alert("You have already voted." + userDetails.voted);
     if (!userDetails.voted) {
-      navigate("/voting-page");
+      navigate(`/voting-page/${adharNo}`); // Pass Aadhar Number to Voting Page
     } else {
       // alert("You have already voted.");
       navigate("/");

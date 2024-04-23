@@ -25,8 +25,9 @@ const router = createBrowserRouter(
       <Route path="contact" element={<Contact />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-      <Route path="user/:userid" element={<User />} />
-      <Route path="voting-page" element={<VotingPage />} />
+      {/* <Route path="voting-page" element={<VotingPage />} /> */}
+      <Route path="/voting-page/:adharNo" element={<VotingPage />} />
+      {/* <Route path="user/:userid" element={<User />} /> */}
     </Route>
   )
 );

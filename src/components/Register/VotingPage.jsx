@@ -1,25 +1,59 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import parties from "./partiesCandidates.js";
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import parties from "./partiesCandidates";
+import dummyPeople, { functionTake } from "./dummyPeople";
 
-function VotingPage({ handleVote }) {
+function VotingPage() {
+  const { adharNo } = useParams();
+  const navigate = useNavigate();
+  const [voter, setVoter] = useState("");
+  const [voterID, setVoterID] = useState("");
   const [voted, setVoted] = useState(false);
   const [selectedParty, setSelectedParty] = useState(null);
+  const [selectedPartyFlag, setSelectedPartyFlag] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
 
-  const handleVoteClick = (partyName) => {
+  const handleVoteClick = (partyName, partyFlag) => {
     setVoted(true);
     setSelectedParty(partyName);
-    handleVote(partyName);
+    setSelectedPartyFlag(partyFlag);
+    handleVote(partyName, adharNo);
     setShowPopup(true);
+    functionTake(adharNo);
   };
+
+  const handleVote = (partyName, adharNo) => {
+    if (!userDetails.voted) {
+      dummyPeople.forEach((person) => {
+        if (person.aadharNo === adharNo) {
+          person.voted = true;
+        }
+      });
+      navigate(`/voting-page/${adharNo}`);
+    } else {
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    const user = dummyPeople.find((person) => person.aadharNo === adharNo);
+    setUserDetails(user);
+    setVoter(user.fullName);
+    setVoterID(user.voterId);
+  }, [adharNo]);
 
   return (
     <div className="flex flex-col mt-4 ">
-      <h2 className="text-2xl font-semibold mb-4">Voting Page</h2>
-      <p>
+      <h2 className="text-2xl text-orange-600 font-semibold mb-1">
+        Voting Page
+      </h2>
+      <p className="text-2xl text-green-600 font-bold mb-2">
+        Dear voter, with voter ID: {voterID}{" "}
+      </p>
+      <p className="text-lg text-blue-600 ">
         Click the button below to vote for your preferred candidate from the
-        list.
+        list..!
       </p>
       <div className="flex justify-center items-center my-4 h-full">
         <table className="border bg-orange-200 border-gray-600 w-full md:w-2/3 lg:w-1/2 rounded-lg overflow-hidden">
@@ -39,6 +73,7 @@ function VotingPage({ handleVote }) {
                     alt={`${party.partyName} Flag`}
                     className="w-8 h-8 mr-2 inline"
                   />
+
                   {party.partyName}
                 </td>
                 <td className="border border-gray-600 px-4 py-2">
@@ -50,8 +85,10 @@ function VotingPage({ handleVote }) {
                     handleVoteClick={handleVoteClick}
                     disabled={
                       voted ||
-                      (selectedParty && selectedParty !== party.partyName)
+                      (selectedParty && selectedParty !== party.partyName) ||
+                      userDetails.voted
                     }
+                    partyFlag={party.partyFlag}
                   />
                 </td>
               </tr>
@@ -62,13 +99,27 @@ function VotingPage({ handleVote }) {
 
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg p-4 max-w-sm text-center">
-            <p className="mb-2">Vote Successful!</p>
+          <div className="bg-orange-400 text-white rounded-lg p-4 max-w-lg text-center">
+            <div>
+              <p>{voter}, Voted to</p>
+              <p>
+                <img
+                  src={selectedPartyFlag}
+                  alt={`${selectedParty} Flag`}
+                  className="w-8 h-8 mr-2 inline"
+                />
+              </p>
+              <p>{selectedParty}</p>
+              Successfuly!
+            </div>
             <button
-              onClick={() => setShowPopup(false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setShowPopup(false);
+                navigate("/");
+              }}
+              className="bg-green-700 hover:bg-orange-700 text-grey-600 m-4 font-bold py-2 px-4 rounded"
             >
-              Close
+              Done
             </button>
           </div>
         </div>
@@ -77,10 +128,10 @@ function VotingPage({ handleVote }) {
   );
 }
 
-function PartyButton({ partyName, handleVoteClick, disabled }) {
+function PartyButton({ partyName, handleVoteClick, disabled, partyFlag }) {
   return (
     <button
-      onClick={() => handleVoteClick(partyName)}
+      onClick={() => handleVoteClick(partyName, partyFlag)}
       disabled={disabled}
       className={`px-4 py-2 rounded ${disabled ? "  cursor-not-allowed" : ""}`}
     >
