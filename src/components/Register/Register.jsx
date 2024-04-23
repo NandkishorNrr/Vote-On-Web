@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import "firebase/database";
 import dummyPeople from "./dummyPeople";
 import VotingPage from "./VotingPage";
