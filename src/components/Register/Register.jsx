@@ -1,7 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import firebase from "firebase/app";
+import "firebase/database";
 import dummyPeople from "./dummyPeople";
 import VotingPage from "./VotingPage";
+
+// Initialize Firebase
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAzwP3hQbNQ2jf3wzIoAM7lV-Zz77ZI5LA",
+  authDomain: "vote-on-web.firebaseapp.com",
+  projectId: "vote-on-web",
+  storageBucket: "vote-on-web.appspot.com",
+  messagingSenderId: "523713870227",
+  appId: "1:523713870227:web:481a3a19c8db688b501066",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+
+const database = firebase.database();
 
 function Registration() {
   const navigate = useNavigate();
@@ -21,7 +44,6 @@ function Registration() {
   const [timer, setTimer] = useState(30);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [userDetails, setUserDetails] = useState({});
-  const [voted, setVoted] = useState(sessionStorage.getItem(adharNo));
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -91,6 +113,12 @@ function Registration() {
 
       // Replace dummyPeople with updatedPeople
       dummyPeople.splice(0, dummyPeople.length, ...updatedPeople);
+
+      // Save data to Firebase
+      database.ref("registeredUsers/" + adharNo).set({
+        ...person,
+        voted: true,
+      });
     } else {
       setOtpErrorCls("text-red-600");
       setOtpError("OTP verification failed.");
