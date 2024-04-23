@@ -21,9 +21,7 @@ function Registration() {
   const [timer, setTimer] = useState(30);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [userDetails, setUserDetails] = useState({});
-  // const [voted, setVoted] = useState(
-  //   sessionStorage.getItem(adharNo) === "true"
-  // );
+  const [voted, setVoted] = useState(sessionStorage.getItem(adharNo));
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);

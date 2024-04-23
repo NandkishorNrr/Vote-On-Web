@@ -28,7 +28,7 @@ function VotingPage() {
     setUserDetails(user);
     setVoter(user.fullName);
     setVoterID(user.voterId);
-    setVoted(sessionStorage.getItem(adharNo) === "true");
+    setVoted(sessionStorage.getItem(adharNo) ? "true" : false);
   }, [adharNo]);
 
   return (
