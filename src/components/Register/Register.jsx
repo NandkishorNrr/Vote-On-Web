@@ -21,6 +21,9 @@ function Registration() {
   const [timer, setTimer] = useState(30);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  // const [voted, setVoted] = useState(
+  //   sessionStorage.getItem(adharNo) === "true"
+  // );
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -79,6 +82,17 @@ function Registration() {
       const person = dummyPeople.find((p) => p.aadharNo === adharNo);
       setUserDetails(person);
       setFullName(`${firstName} ${lastName}`);
+
+      // Update person's voted status
+      const updatedPeople = dummyPeople.map((p) => {
+        if (p.aadharNo === adharNo) {
+          return { ...p, voted: true };
+        }
+        return p;
+      });
+
+      // Replace dummyPeople with updatedPeople
+      dummyPeople.splice(0, dummyPeople.length, ...updatedPeople);
     } else {
       setOtpErrorCls("text-red-600");
       setOtpError("OTP verification failed.");
@@ -188,7 +202,7 @@ function Registration() {
               </button>
             </div>
           ) : null}
-          {isVerified && !registrationSuccess && !userDetails.voted && (
+          {(isVerified || userDetails.voted) && !registrationSuccess && (
             <>
               <div className="flex flex-col items-center mt-2 ">
                 <img
@@ -210,43 +224,22 @@ function Registration() {
                 </label>
                 <div>{userDetails ? userDetails.address : address}</div>
               </div>
-              <button
-                type="button"
-                onClick={handleVote}
-                className="bg-green-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-green-700 transition ease-in-out duration-300"
-              >
-                Go For Vote
-              </button>
-            </>
-          )}
-          {userDetails.voted && !registrationSuccess && (
-            <>
-              <div className="flex flex-col items-center mt-2 ">
-                <img
-                  src={userDetails.profilePhoto}
-                  alt=""
-                  className="w-32 h-32 object-cover rounded-lg"
-                />{" "}
-                {/* Adjust size as needed */}
-              </div>
-              <div className="flex flex-col mt-2">
-                <label htmlFor="fullName" className="font-semibold">
-                  Name:
-                </label>
-                <div>{userDetails ? userDetails.fullName : fullName}</div>
-              </div>
-              <div className="flex flex-col mt-2">
-                <label htmlFor="address" className="font-semibold">
-                  Address:
-                </label>
-                <div>{userDetails ? userDetails.address : address}</div>
+              {userDetails.voted ? (
                 <button
                   onClick={handleVote}
                   className="bg-orange-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-orange-700 transition ease-in-out duration-300"
                 >
                   Your vote has been considered..!
                 </button>
-              </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleVote}
+                  className="bg-green-600 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg mt-3 hover:bg-green-700 transition ease-in-out duration-300"
+                >
+                  Go For Vote
+                </button>
+              )}
             </>
           )}
         </form>

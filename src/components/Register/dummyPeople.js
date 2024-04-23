@@ -1,4 +1,6 @@
-const dummyPeople = [
+import fs from "fs";
+
+let dummyPeople = [
   {
     id: "123456789012",
     firstName: "John",
@@ -11,7 +13,7 @@ const dummyPeople = [
     voterId: "VOT1234567",
     verified: true,
     profilePhoto: "https://via.placeholder.com/150/FF5733/FFFFFF?text=John+Doe", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("123456789012")) || false,
+    voted: false,
   },
   {
     id: "234567890123",
@@ -26,7 +28,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/FFC300/FFFFFF?text=Alice+Smith", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("234567890123")) || false,
+    voted: false,
   },
   {
     id: "345678901234",
@@ -41,7 +43,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/DAF7A6/000000?text=Michael+Johnson", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("345678901234")) || false,
+    voted: false,
   },
   {
     id: "456789012345",
@@ -56,7 +58,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/96D9D6/000000?text=Emily+Brown", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("456789012345")) || false,
+    voted: false,
   },
   {
     id: "567890123456",
@@ -71,7 +73,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/C0C0C0/FFFFFF?text=David+Martinez", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("567890123456")) || false,
+    voted: false,
   },
   {
     id: "678901234567",
@@ -86,7 +88,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/536DFE/FFFFFF?text=Olivia+Wilson", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("678901234567")) || false,
+    voted: false,
   },
   {
     id: "789012345678",
@@ -101,7 +103,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/FFC0CB/000000?text=William+Taylor", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("789012345678")) || false,
+    voted: false,
   },
   {
     id: "890123456789",
@@ -116,7 +118,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/00BFFF/FFFFFF?text=Sophia+Anderson", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("890123456789")) || false,
+    voted: false,
   },
   {
     id: "901234567890",
@@ -131,7 +133,7 @@ const dummyPeople = [
     verified: true,
     profilePhoto:
       "https://via.placeholder.com/150/FF5733/FFFFFF?text=James+Thomas", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("901234567890")) || false,
+    voted: false,
   },
   {
     id: "012345678901",
@@ -146,7 +148,7 @@ const dummyPeople = [
     verified: false,
     profilePhoto:
       "https://via.placeholder.com/150/2ECC71/FFFFFF?text=Emma+Hernandez", // Placeholder URL for profile photo
-    voted: JSON.parse(sessionStorage.getItem("012345678901")) || false,
+    voted: false,
   },
 ];
 
@@ -154,8 +156,33 @@ export function functionTake(aadharNo) {
   const person = dummyPeople.find((person) => person.aadharNo === aadharNo);
   if (person && !person.voted) {
     person.voted = true;
-    sessionStorage.setItem(aadharNo, JSON.stringify(true));
+    updateVotedInFile(aadharNo);
   }
+}
+
+export function setVoted(aadharNo) {
+  const person = dummyPeople.find((person) => person.aadharNo === aadharNo);
+  if (person) {
+    person.voted = true;
+    updateVotedInFile(aadharNo);
+  }
+}
+
+export function updateVotedInFile(aadharNo) {
+  const personIndex = dummyPeople.findIndex(
+    (person) => person.aadharNo === aadharNo
+  );
+  if (personIndex !== -1) {
+    dummyPeople[personIndex].voted = true;
+    fs.writeFile("dummyPeople.json", JSON.stringify(dummyPeople), (err) => {
+      if (err) throw err;
+      console.log("Data has been written to the file");
+    });
+  }
+}
+
+export function setVotedStatus(aadharNo) {
+  sessionStorage.setItem(aadharNo, true);
 }
 
 export default dummyPeople;

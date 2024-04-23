@@ -1,7 +1,9 @@
+// VotingPage.jsx
+
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import parties from "./partiesCandidates";
-import dummyPeople, { functionTake } from "./dummyPeople";
+import dummyPeople, { setVotedStatus } from "./dummyPeople";
 
 function VotingPage() {
   const { adharNo } = useParams();
@@ -15,25 +17,10 @@ function VotingPage() {
   const [userDetails, setUserDetails] = useState({});
 
   const handleVoteClick = (partyName, partyFlag) => {
-    setVoted(true);
+    setVotedStatus(adharNo);
     setSelectedParty(partyName);
     setSelectedPartyFlag(partyFlag);
-    handleVote(partyName, adharNo);
     setShowPopup(true);
-    functionTake(adharNo);
-  };
-
-  const handleVote = (partyName, adharNo) => {
-    if (!userDetails.voted) {
-      dummyPeople.forEach((person) => {
-        if (person.aadharNo === adharNo) {
-          person.voted = true;
-        }
-      });
-      navigate(`/voting-page/${adharNo}`);
-    } else {
-      navigate("/");
-    }
   };
 
   useEffect(() => {
@@ -41,6 +28,7 @@ function VotingPage() {
     setUserDetails(user);
     setVoter(user.fullName);
     setVoterID(user.voterId);
+    setVoted(sessionStorage.getItem(adharNo) === "true");
   }, [adharNo]);
 
   return (
@@ -73,7 +61,6 @@ function VotingPage() {
                     alt={`${party.partyName} Flag`}
                     className="w-8 h-8 mr-2 inline"
                   />
-
                   {party.partyName}
                 </td>
                 <td className="border border-gray-600 px-4 py-2">
@@ -85,8 +72,7 @@ function VotingPage() {
                     handleVoteClick={handleVoteClick}
                     disabled={
                       voted ||
-                      (selectedParty && selectedParty !== party.partyName) ||
-                      userDetails.voted
+                      (selectedParty && selectedParty !== party.partyName)
                     }
                     partyFlag={party.partyFlag}
                   />
@@ -110,7 +96,7 @@ function VotingPage() {
                 />
               </p>
               <p>{selectedParty}</p>
-              Successfuly!
+              Successfully!
             </div>
             <button
               onClick={() => {
