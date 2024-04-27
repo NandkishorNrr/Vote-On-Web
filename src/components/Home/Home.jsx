@@ -40,7 +40,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/BJP_Flag.svg"
+                            src="../../images/BJP_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -49,7 +49,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/INC_Flag.svg"
+                            src="../../images/INC_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -58,7 +58,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/AAP_Flag.svg"
+                            src="../../images/AAP_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -67,7 +67,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/BSP_Flag.svg"
+                            src="../../images/BSP_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -76,7 +76,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/CPI_Flag.svg"
+                            src="../../images/CPI_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -85,7 +85,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/NPP_Flag.svg"
+                            src="../../images/NPP_Flag.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />
@@ -94,7 +94,7 @@ export default function Home() {
                         </th>
                         <th className="px-6 py-3 border border-gray-700">
                           <img
-                            src="/images/Total_Votes.svg"
+                            src="../../images/Total_Votes.svg"
                             className="mr-3 h-8"
                             alt="Logo"
                           />

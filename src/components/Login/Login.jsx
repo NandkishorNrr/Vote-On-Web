@@ -24,7 +24,7 @@ function Login() {
     <div className="flex justify-center items-center h-screen">
       <div className="grid grid-cols-1 bg-orange-400 bg-opacity-50 rounded-lg p-8 md:grid-cols-2">
         <div className="p-6 mr-2 sm:rounded-lg">
-          <img src="/images/VOw-GoVote.png" alt="" />
+          <img src="../../images/VOw-GoVote.png" alt="" />
         </div>
 
         <form className="p-6 flex flex-col justify-center">

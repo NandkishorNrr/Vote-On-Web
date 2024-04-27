@@ -44,7 +44,11 @@ export default function Header() {
       <nav className="bg-orange-200 rounded-md border-gray-200 px-2 lg:px-6 py-1">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
-            <img src="/images/VOW-logo.png" className="mr-3 h-12" alt="Logo" />
+            <img
+              src="../../images/VOW-logo.png"
+              className="mr-3 h-12"
+              alt="Logo"
+            />
           </Link>
           <div className="flex items-center lg:order-2">
             <p className="text-orange-700 font-bold text-3xl">
@@ -66,7 +70,7 @@ export default function Header() {
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               <Link to="/register">
                 <img
-                  src="/images/VOW-voteIndial.png"
+                  src="../../images/VOW-voteIndial.png"
                   className=" h-16"
                   alt="Logo"
                 />
